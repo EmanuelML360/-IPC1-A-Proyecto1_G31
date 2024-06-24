@@ -1,0 +1,77 @@
+.login-background {
+    background-image: url('../Imagenes/fondoCine.jpg');
+    background-position: center;
+    background-size: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: fit-content;
+    z-index: -1;
+    padding-bottom: 10%;
+}
+
+
+.card {
+    background-color: rgba(0, 0, 0, 0.87);
+}
+
+.card-title {
+    color: white;
+}
+
+.btn {
+    border-color: white;
+    color: white;
+    margin-right: 2.5%;
+    margin-left: 2.5%;
+}
+
+.btn:hover {
+    background-color: white;
+    border-color: white;
+    color: red;
+}
+
+a{
+    text-decoration: none;
+    color: white;
+}
+a:hover {
+    color: red;
+}
+
+.titulo {
+    font-size: 120px;
+    margin-bottom: 0;
+    color: rgb(0, 0, 0);
+    text-shadow: 3px 3px  rgb(255, 255, 255);
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-weight: 900;
+}
+
+.form-signin {
+    max-width: 100%;
+    padding: 1rem;
+}
+
+.form-signin .form-floating:focus-within {
+    z-index: 2;
+}
+
+.form-signin input[type="email"] {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.form-signin input[type="password"] {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.table-container {
+    margin: 0 auto;
+    min-width: 80%;
+}
