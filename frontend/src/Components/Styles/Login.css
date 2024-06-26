@@ -1,4 +1,4 @@
-.login-background {
+.login-background_ {
     background-image: url('../Imagenes/fondo.jpg');
     background-size: cover;
     background-position: center;
@@ -37,7 +37,7 @@ a:hover {
     color: red;
 }
 
-.titulo {
+.titulo__ {
     font-size: 120px;
     margin-bottom: -5%;
     color: rgb(0, 0, 0);

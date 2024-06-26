@@ -23,7 +23,8 @@ function SignUp(){
             genero: genero,
             correo: correo,
             contraseña: contraseña,
-            fechaNacimiento: fechaNacimiento
+            fechaNacimiento: fechaNacimiento,
+            role: 1
         }
         if (nombre === "" || apellido === "" || genero === "" || correo === "" || contraseña === "" || fechaNacimiento === "") {
             alert(`Haz dejado un campo en blanco.`)
@@ -65,7 +66,7 @@ function SignUp(){
 
     return (
         <div className="login-background">
-            <div><h1 className='titulo'>PopCornFlix</h1></div>
+            <div><h1 className='titulo_'>PopCornFlix</h1></div>
             <div className="container-fluid h-100">
                 <div className="row align-items-center h-100">
                     <div className="col-md-6 mx-auto">

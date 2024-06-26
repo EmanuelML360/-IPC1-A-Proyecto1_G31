@@ -31,11 +31,12 @@ nav {
     height: 100%;
 }
 
-.menu {
-    width: 70%;
+.menu_ {
+    width: 65%;
     height: 100%;
     box-sizing: border-box;
     align-items: center;
+    position: relative;
 }
 
 .submenu {
@@ -101,4 +102,15 @@ ul, li {
     100%{
         
     }
+}
+
+#btn {
+    width: 100px;
+    position: absolute;
+    bottom: -20px;
+    right: -80px;    
+}
+
+#btn:hover {
+    border-color: red;
 }
