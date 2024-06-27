@@ -34,6 +34,15 @@ function Historial() {
                 setHistorial(historial_Usuario);
             })
             .catch((error) => console.error(error));
+
+            fetch(`http://localhost:5000/historial/retraso`, {
+                method: "GET",
+            })
+                .then((response) => response.json())
+                .then((res) => {
+                    const retraso = res.response
+                })
+                .catch((error) => console.error(error));
     }, []);
 
     const handleLogout = () => {
@@ -70,7 +79,10 @@ function Historial() {
                             <td>Fecha fin renta</td>
                             <td>Fecha entregada</td>
                             <td>Estado de renta</td>
+                            <td>Dias retraso</td>
                             <td>Mora</td>
+                            <td>Costo</td>
+                            <td>Total</td>
                         </tr>
                     </table>
                     {historial.map((item, index) => (
@@ -82,10 +94,17 @@ function Historial() {
                                     <td>{item.fechaFin}</td>
                                     <td>{item.fechaEntrega}</td>
                                     <td>{item.estado}</td>
+                                    <td>{item.retraso}</td>
                                     <td>Q{item.mora}.00</td>
-                                    
+                                    <td>Q{item.precioAlquiler}</td>
+                                    <td>Q{item.precioAlquiler + item.mora}</td>
                                 </tr>
                             </table>
+                            {(item.retraso > 0 && item.estado === 'En renta') && (
+            <div className="alert alert-danger" role="alert">
+                ¡Tienes días de retraso al devolver esta película!
+            </div>
+        )}
                         </div>
                     ))}
                 </div>

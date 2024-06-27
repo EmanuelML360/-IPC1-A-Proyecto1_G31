@@ -108,6 +108,10 @@ app.get("/peliculas", (req, res) => {
     res.json(dataPeliculasSinRentar);
 });
 
+app.get("/peliculas/admin", (req, res) => {
+    res.json(dataPeliculas);
+});
+
 app.get("/comentarios", (req, res) => {
     res.json(dataComentarios);
 });
@@ -182,7 +186,7 @@ app.put("/usuarios/:correo", (req, res) => {
         dataUsuarios[index].contraseña = actualizarUsuario.contraseña;
         dataUsuarios[index].fechaNacimiento = actualizarUsuario.fechaNacimiento;
         updateDataUsuarios();
-        res.send({respose: 'Usuario actualizado correctamente'});
+        res.send({response: 'Usuario actualizado correctamente'});
     }
 });
 
@@ -190,18 +194,46 @@ app.put("/peliculas/:titulo", (req, res) => {
     const titulo = req.params.titulo;
     const actualizarPelicula = req.body;
     const index = dataPeliculas.findIndex(pelicula => pelicula.titulo === titulo);
+    const index2 = dataPeliculasRentas.findIndex(pelicula => pelicula.titulo === titulo);
+    const index3 = dataPeliculasSinRentar.findIndex(pelicula => pelicula.titulo === titulo);
+    const index4 = dataHistorial.findIndex(pelicula => pelicula.titulo === titulo);
     if (index === -1) {
         res.status(404).send({response: 'Pelicula no encontrada'});
     } else {
         dataPeliculas[index].titulo = actualizarPelicula.titulo;
         dataPeliculas[index].sinopsis= actualizarPelicula.sinopsis;
-        dataPeliculas[index].preciodealquiler = actualizarPelicula.preciodealquiler;
+        dataPeliculas[index].precioAlquiler = actualizarPelicula.precioAlquiler;
         dataPeliculas[index].director = actualizarPelicula.director;
         dataPeliculas[index].añodeestreno = actualizarPelicula.añodeestreno;
         dataPeliculas[index].duracion = actualizarPelicula.duracion;
         dataPeliculas[index].genero = actualizarPelicula.genero;
-        dataPeliculas[index].imagen =  actualizarPelicula.imagen;
+        dataPeliculas[index].image =  actualizarPelicula.image;
         updateDataPeliculas();
+
+        if (dataPeliculasSinRentar[index3]?.titulo){
+            dataPeliculasSinRentar[index3].titulo = actualizarPelicula.titulo;
+            dataPeliculasSinRentar[index3].sinopsis= actualizarPelicula.sinopsis;
+            dataPeliculasSinRentar[index3].precioAlquiler = actualizarPelicula.precioAlquiler;
+            dataPeliculasSinRentar[index3].director = actualizarPelicula.director;
+            dataPeliculasSinRentar[index3].añodeestreno = actualizarPelicula.añodeestreno;
+            dataPeliculasSinRentar[index3].duracion = actualizarPelicula.duracion;
+            dataPeliculasSinRentar[index3].genero = actualizarPelicula.genero;
+            dataPeliculasSinRentar[index3].image =  actualizarPelicula.image;
+            updateDataPeliculasSinRentar();
+
+            if (dataHistorial[index4]?.titulo){
+                dataHistorial[index4].titulo = actualizarPelicula.titulo;
+            updateDataHistorial();
+            }
+        } else {
+            dataPeliculasRentas[index2].precioAlquiler = actualizarPelicula.precioAlquiler;
+            dataPeliculasRentas[index2].titulo = actualizarPelicula.titulo;
+            updateDataPeliculasRentadas();
+
+            dataHistorial[index4].titulo = actualizarPelicula.titulo;
+            updateDataHistorial();
+        }
+        
         res.send({respose: 'Usuario actualizado correctamente'});
     }
 });
@@ -241,17 +273,15 @@ app.delete('/usuarios/:correo', (req, res) => {
 
 app.delete('/peliculas/:titulo', (req, res) => {
     const titulo = req.params.titulo;
-    const index = dataPeliculas.findIndex(pelicula => {
-        if (pelicula.titulo === titulo) {
-            console.log("Pelicula encontrada")
-            return pelicula
-        }
-    });
+    const index = dataPeliculas.findIndex(pelicula => pelicula.titulo === titulo);
+    const index2 = dataPeliculasSinRentar.findIndex(pelicula => pelicula.titulo === titulo);
     if (index === -1) {
         res.status(404).send({response: 'Pelicula no encontrada'});
     } else {
         dataPeliculas.splice(index, 1);
         updateDataPeliculas();
+        dataPeliculasSinRentar.splice(index, 1);
+        updateDataPeliculasSinRentar();
         res.send({response: 'Pelicula eliminada correctamente'});
     }
 });
@@ -329,6 +359,7 @@ app.post('/rentar/:titulo', (req, res) => {
     data.fechaInicio = fecha;
     data.fechaFin = fecha48;
     data.estado = "En alquiler";
+    data.retraso = 0;
     dataHistorial.push(data);
     updateDataHistorial();
     
@@ -354,6 +385,7 @@ app.delete('/devolver/:titulo', (req, res) => {
     const moment = require('moment');
     const fechaActual = moment();
     let mora = 0;
+    let diasAdicionales = 0;
 
     const fechaInicio = peliculaHistorial.fechaInicio
 
@@ -364,11 +396,12 @@ app.delete('/devolver/:titulo', (req, res) => {
         const diferenciaDias = fechaActual.diff(fechaInicioMoment, 'days');
 
         if (diferenciaDias >= 2) {
-            const diasAdicionales = diferenciaDias - 1;
+            diasAdicionales = diferenciaDias - 1;
             mora = diasAdicionales * 5;
             peliculaHistorial.estado = "Devuelto tarde"
         } else {
             peliculaHistorial.estado = "Devuelto"
+            diasAdicionales = 0;
         }
     } else {
         console.log('Fecha de inicio no válida');
@@ -376,6 +409,7 @@ app.delete('/devolver/:titulo', (req, res) => {
     const fechaFormato = moment(fechaActual);
     const fechaFormateada = fechaFormato.format('DD/MM/YYYY, h:mm:ss a');
     peliculaHistorial.fechaEntrega = fechaFormateada;
+    peliculaHistorial.retraso = diasAdicionales;
     peliculaHistorial.mora = mora;
     peliculaHistorial.precioTotal = peliculaHistorial.precioAlquiler + mora;
     updateDataHistorial();
@@ -392,6 +426,39 @@ app.delete('/devolver/:titulo', (req, res) => {
 app.get('/historial', (req, res) => {
     res.json(dataHistorial);
 });
+
+const calcularMora = (diasRetraso) => {
+    const tarifaPorDia = 10;
+    return diasRetraso * tarifaPorDia;
+};
+
+app.get('/historial/retraso', (req, res) => {
+    const moment = require('moment');
+    const fechaActual = moment();
+    
+    dataHistorial = dataHistorial.map(pelicula => {
+        const fechaInicioMoment = moment(pelicula.fechaInicio, 'DD/MM/YYYY, h:mm:ss a');
+
+        if (fechaInicioMoment.isValid()) {
+            const diferenciaDias = fechaActual.diff(fechaInicioMoment, 'days');
+
+            if (diferenciaDias >= 2) {
+                pelicula.retraso = diferenciaDias - 1;
+                pelicula.mora = calcularMora(pelicula.retraso);
+                updateDataHistorial()
+            } else {
+                pelicula.retraso = 0;
+                pelicula.mora = 0;
+            }
+        } else {
+            console.log(`Fecha de inicio no válida para la película con id: ${pelicula.id}`);
+        }
+
+        return pelicula;
+    });
+
+    res.json({ response: dataHistorial });
+})
 
 app.listen(PORT, () => {
     console.log(`Servidor escuchando en el puerto ${PORT}`);

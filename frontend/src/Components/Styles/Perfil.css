@@ -105,10 +105,42 @@ ul, li {
     }
 }
 
-section {
+.section_ {
     width: 100%;
     height: auto;
     position: relative;
     box-sizing: border-box;
     margin: 0;
+    background-color: rgb(255, 3, 66);
+}
+
+.datosPerfil {
+    width: 100%;
+    height: fit-content;
+    box-sizing: border-box;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 5%;
+}
+
+.datosPerfil h1 {
+    width: 100%;
+    color: rgb(255, 255, 255);
+    border-bottom: 2px solid rgb(255, 255, 255);
+    padding: 1%;
+}
+
+.datosPerfil .btn {
+    border: 2px solid black;
+    color: black;
+}
+
+.datosPerfil .btn:hover {
+    background-color: black;
+    color: white;
+}
+
+.datosPerfil_ {
+    width: 60%;
 }

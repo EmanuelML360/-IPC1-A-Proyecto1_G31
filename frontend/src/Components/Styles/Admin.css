@@ -114,3 +114,47 @@ ul, li {
 #btn:hover {
     border-color: red;
 }
+
+.sectionAdmin {
+    width: 100%;
+    height:auto;
+    box-sizing: border-box;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 2%;
+    background-color: red;
+    
+}
+
+.sectionAdmin h1 {
+    width: 90%;
+    margin-left: 5%;
+    height: auto;
+    color: white;
+    border-bottom: 2px solid rgb(255, 255, 255);
+    padding: 1%;
+}
+
+.sectionAdmin p {
+    width: 100%;
+    height: auto;
+    color: white;
+    padding: 1%;
+    font-weight: 400;
+}
+
+.sectionAdmin img {
+    opacity: 1;
+}
+
+.sectionAdmin .div {
+    width: 100%;
+    height: auto;
+    padding: 3%;
+}
+
+.sectionAdmin .bi {
+    color: white;
+    width: 22%;
+    height: auto;
+}

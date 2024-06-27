@@ -26,16 +26,12 @@ function IngresarPeliculas() {
     };
 
     const handleImageChange = (event) => {
-        // Evita que se recargue la página
         event.preventDefault();
-        // Agarramos el primer archivo
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
             reader.onload = () => {
-                // Guardamos la imagen para que se muestre en la vista previa
                 setSelectedImage(URL.createObjectURL(file));
-                // Guardamos la base 64 para mandarla al backend
                 setBase64Image(reader.result);
             };
             reader.readAsDataURL(file);
@@ -85,7 +81,22 @@ function IngresarPeliculas() {
 
     return (
         <>
-            <Admin />
+            <header>
+                <nav>
+                    <div className='contIcono'>
+                        <img src="/src/Components/Imagenes/Popcornflix.png" alt="PopCornFlix" />
+                    </div>
+                    <div className='menu_'>
+                        <ul className='submenu'>
+                        <li className='casilla'><a href="/admin" className='link'>Inicio<figure className='figura'></figure></a></li>
+                            <li className='casilla'><a href="/admin/ingresarPeliculas" className='link'>Ingresar peliculas <figure className='figura'></figure></a></li>
+                            <li className='casilla'><a href="/admin/contenido" className='link'>Contenido<figure className='figura'></figure></a></li>
+                            <li className='casilla'><a href="/admin/usuarios" className='link'>Usuarios<figure className='figura'></figure></a></li>
+                            <li className='casilla'><button class="btn btn-danger" id='btn' onClick={handleLogout}>Cerrar seción</button></li>
+                        </ul>
+                    </div>
+                </nav>
+            </header>
             <section className='barraTitulo'>
                 <h1>Ingresar nuevo contenido</h1>
             </section>

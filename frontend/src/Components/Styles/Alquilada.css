@@ -17,6 +17,7 @@ nav {
     margin: 0;
     position: relative;
     padding: 0;
+    z-index: 3;
 }
 
 .contIcono {
@@ -117,6 +118,12 @@ ul, li {
     justify-content: center;
     padding: 5%;
     justify-content: center;
+    background-color: rgb(255, 255, 255);
+    z-index: -1;
+}
+
+.body {
+    background-color: white;
 }
 
 .tituloHistorial {

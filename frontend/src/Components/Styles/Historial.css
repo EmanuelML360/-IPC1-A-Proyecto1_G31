@@ -149,10 +149,10 @@ ul, li {
     border-collapse: collapse;
 }
 
-.table th, td {
+.table td {
     border: 1px solid #ddd;
     padding: 8px;
     text-align: left;
     font-size: small;
-    width: 16.66%;
+    width: 10%;
 }

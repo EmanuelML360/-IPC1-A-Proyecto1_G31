@@ -230,7 +230,7 @@ function Catalogo() {
                     <figure className='linea'></figure>
                     <a name="catalogo"></a>
                 </div>
-                <div className='targetaPeli' style={{ height: "auto", width: "100%", top: "10", paddingTop: "5%", paddingRight: "5%", paddingLeft: "5%" }}>
+                <div className='targetaPeli' style={{ height: "auto", width: "100%", top: "10", paddingRight: "5%", paddingLeft: "5%" }}>
                     {peliculas.map((item, index) => (
                         <div className="card mb-3 mb-5" onMouseLeave={() => handleMouseLeave(index)} onClick={() => toggleCardFondo(index)} id='card' key={index}>
                             <img className="card-img-top" src={item.image} alt="" />

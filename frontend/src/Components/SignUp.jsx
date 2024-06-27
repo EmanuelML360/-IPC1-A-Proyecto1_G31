@@ -24,7 +24,7 @@ function SignUp(){
             correo: correo,
             contraseña: contraseña,
             fechaNacimiento: fechaNacimiento,
-            role: 1
+            role: "1"
         }
         if (nombre === "" || apellido === "" || genero === "" || correo === "" || contraseña === "" || fechaNacimiento === "") {
             alert(`Haz dejado un campo en blanco.`)
@@ -52,6 +52,7 @@ function SignUp(){
                     setContraseña("")
                     setGenero("")
                     setFechaNacimiento("")
+                    Regresar()
                 })
                 .catch((error) => console.error(error));
         }
@@ -99,20 +100,20 @@ function SignUp(){
                                     </div>
 
                                     <div className="form-floating" style={{ width: "100%" }}>
-                                        <input
-                                            type="text"
+                                        <select type="text"
                                             className="form-control"
                                             id="floatingInput"
                                             placeholder=""
                                             onChange={(e) => setGenero(e.target.value)}
-                                            value={genero}
-                                        />
+                                            value={genero}>
+                                            <option value="opcion1">M</option>
+                                            <option value="opcion2">F</option>
+                                        </select>
                                         <label htmlFor="floatingInput">Genero</label>
                                     </div>
-
                                     <div className="form-floating" style={{ width: "100%" }}>
                                         <input
-                                            type="text"
+                                            type="date"
                                             className="form-control"
                                             id="floatingInput"
                                             placeholder=""
