@@ -49,8 +49,8 @@ function Login() {
     }
 
     return (
-        <div className="login-background">
-            <div><h1 className='titulo'>PopCornFlix</h1></div>
+        <div className="login-background_">
+            <div><h1 className='titulo__'>PopCornFlix</h1></div>
             <div className="container-fluid h-100">
                 <div className="row align-items-center h-100">
                     <div className="col-md-6 mx-auto">

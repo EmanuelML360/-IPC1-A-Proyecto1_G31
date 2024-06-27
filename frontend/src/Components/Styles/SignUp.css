@@ -33,15 +33,9 @@
     color: red;
 }
 
-a{
-    text-decoration: none;
-    color: white;
-}
-a:hover {
-    color: red;
-}
 
-.titulo {
+
+.titulo_ {
     font-size: 120px;
     margin-bottom: 0;
     color: rgb(0, 0, 0);

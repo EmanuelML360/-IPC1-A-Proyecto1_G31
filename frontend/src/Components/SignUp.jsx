@@ -11,7 +11,7 @@ function SignUp(){
     const [correo, setCorreo] =useState('');
     const [contraseña, setContraseña] =useState('');
     const [fechaNacimiento, setFechaNacimiento] =useState('');
-    const [cookies, setCookie] = useCookies(['usuario'])
+    const [cookies, setCookie] = useCookies(['usuario']);
 
     const navigate = useNavigate();
 
@@ -23,8 +23,9 @@ function SignUp(){
             genero: genero,
             correo: correo,
             contraseña: contraseña,
-            fechaNacimiento: fechaNacimiento
-        }
+            fechaNacimiento: fechaNacimiento,
+            role: "1"
+        };
         if (nombre === "" || apellido === "" || genero === "" || correo === "" || contraseña === "" || fechaNacimiento === "") {
             alert(`Haz dejado un campo en blanco.`)
         } else {
@@ -51,21 +52,23 @@ function SignUp(){
                     setContraseña("")
                     setGenero("")
                     setFechaNacimiento("")
+                    
+                    navigate('/login')
                 })
                 .catch((error) => console.error(error));
         }
 
         
-    }
+    };
 
     const Regresar = (event) => {
         event.preventDefault();
         navigate('/login')
-    }
+    };
 
     return (
         <div className="login-background">
-            <div><h1 className='titulo'>PopCornFlix</h1></div>
+            <div><h1 className='titulo_'>PopCornFlix</h1></div>
             <div className="container-fluid h-100">
                 <div className="row align-items-center h-100">
                     <div className="col-md-6 mx-auto">
@@ -84,7 +87,6 @@ function SignUp(){
                                         />
                                         <label htmlFor="floatingInput">Nombre</label>
                                     </div>
-
                                     <div className="form-floating" style={{ width: "100%" }}>
                                         <input
                                             type="text"
@@ -96,22 +98,22 @@ function SignUp(){
                                         />
                                         <label htmlFor="floatingInput">Apellido</label>
                                     </div>
-
                                     <div className="form-floating" style={{ width: "100%" }}>
-                                        <input
-                                            type="text"
+                                        <select
                                             className="form-control"
                                             id="floatingInput"
-                                            placeholder=""
                                             onChange={(e) => setGenero(e.target.value)}
                                             value={genero}
-                                        />
-                                        <label htmlFor="floatingInput">Genero</label>
+                                        >
+                                            <option value="" disabled hidden>Selecciona una opción</option>
+                                            <option value="M">M</option>
+                                            <option value="F">F</option>
+                                        </select>
+                                        <label htmlFor="floatingInput">Género</label>
                                     </div>
-
                                     <div className="form-floating" style={{ width: "100%" }}>
                                         <input
-                                            type="text"
+                                            type="date"
                                             className="form-control"
                                             id="floatingInput"
                                             placeholder=""
@@ -120,7 +122,6 @@ function SignUp(){
                                         />
                                         <label htmlFor="floatingInput">Fecha de Nacimiento</label>
                                     </div>
-
                                     <div className="form-floating" style={{ width: "100%" }}>
                                         <input
                                             type="text"
