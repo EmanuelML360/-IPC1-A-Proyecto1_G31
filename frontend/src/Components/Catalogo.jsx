@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 import { useNavigate } from "react-router-dom";
 import './Styles/Catalogo.css';
-import { response } from 'express';
 
 function Catalogo() {
     const [peliculas, setPeliculas] = useState([]);
     const [comentarios, setComentarios] = useState([]);
     const [texto, setTexto] = useState("");
-    const [peliculaSeleccionada, setPeliculaSeleccionada] = useState(null); 
+    const [peliculaSeleccionada, setPeliculaSeleccionada] = useState(null);
+    const [peliculaPorRentar, setPeliculaPorRentar] = useState(null); 
     const [comentarioEditando, setComentarioEditando] = useState(null); 
     const [cookies, setCookie, removeCookie] = useCookies(['usuario']);
     const navigate = useNavigate();
@@ -71,6 +71,39 @@ function Catalogo() {
             .catch((error) => console.error(error));
     };
 
+    const rentar = (index) => {
+        setPeliculaPorRentar(peliculas[index])
+    }
+
+    const cancelarRenta = () => {
+        setPeliculaPorRentar(null);
+    }
+
+    const rentarPelicula = () => {
+
+        const data = {
+            persona: persona,
+            precioAlquiler : peliculaPorRentar.precioAlquiler
+        };
+
+        fetch(`http://localhost:5000/rentar/${peliculaPorRentar.titulo}`, {
+            method: "POST",
+            body: JSON.stringify(data),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+            .then((response) => response.json())
+            .then((res) => {
+                alert(res.response)
+                setPeliculas(res.data.reverse());
+                setPeliculaPorRentar(null);
+            })
+            .catch((error) => console.error(error));
+            
+            
+    }
+
     const salir = () => {
         setPeliculaSeleccionada(null);
         setTexto("");
@@ -87,9 +120,23 @@ function Catalogo() {
         setTexto("");
     };
 
-    const borrar = () => {
-        setTexto("")
-    };
+    const borrar = (index) => {
+        const comentariosDePelicula = comentarios.filter(comentario => comentario.titulo === peliculaSeleccionada.titulo);
+        
+
+        fetch(`http://localhost:5000/comentarios/${comentariosDePelicula[index].posicion}`, {
+            method: "DELETE",
+        })
+        .then((response) => response.json())
+        .then(() => {
+            alert('Eliminado correctamente');
+            cancelarEdicion();
+            comentariosDePelicula.splice(index, 1)
+            setComentarios(comentariosDePelicula)
+        })
+        .catch((error) => console.error(error));
+
+    }
 
     const actualizarComentario = (index) => {
 
@@ -101,7 +148,7 @@ function Catalogo() {
             texto: texto,
         };
 
-        fetch(`http://localhost:5000/comentarios/${comentariosDePelicula[index].posicion}`, {
+                fetch(`http://localhost:5000/comentarios/${comentariosDePelicula[index].posicion}`, {
             method: "PUT",
             body: JSON.stringify(data),
             headers: {
@@ -143,15 +190,16 @@ function Catalogo() {
                 "Content-Type": "application/json",
             },
         })
+
             .then((response) => response.json())
             .then(() => {
                 alert('Comentario creado correctamente');
-                setComentarios([comentarioConBoton, ...comentarios]);
+                setComentarios([data, ...comentarios]);
                 cancelarEdicion()
-                comentar()
             })
             .catch((error) => console.error(error));
-    };
+                
+    }
 
     return (
         <>
@@ -163,10 +211,10 @@ function Catalogo() {
                     <div className='menu'>
                         <ul className='submenu'>
                             <li className='casilla'><a href="/user" className='link'>Catalogo<figure className='figura'></figure></a></li>
-                            <li className='casilla'><a href="/alquilada" className='link'>Alquilada<figure className='figura'></figure></a></li>
-                            <li className='casilla'><a href="" className='link'>Devolver pelicula<figure className='figura'></figure></a></li>
-                            <li className='casilla'><a href="" className='link'>Historial<figure className='figura'></figure></a></li>
-                            <li className='casilla'><a href="" className='link'>Perfil<figure className='figura'></figure></a></li>
+                            <li className='casilla'><a href="/user/alquilada" className='link'>Alquilada<figure className='figura'></figure></a></li>
+                            <li className='casilla'><a href="/user/devolverAlquilada" className='link'>Devolver pelicula<figure className='figura'></figure></a></li>
+                            <li className='casilla'><a href="/user/historial" className='link'>Historial<figure className='figura'></figure></a></li>
+                            <li className='casilla'><a href="/user/perfil" className='link'>Perfil<figure className='figura'></figure></a></li>
                             <li className='casilla'><button className="btn btn-danger" id='btn' onClick={handleLogout}>Cerrar sesión</button></li>
                         </ul>
                     </div>
@@ -189,9 +237,8 @@ function Catalogo() {
                             <p className='vermas'>Ver más (Haz clic)</p>
                             <div className="card-body" id='card-body'>
                                 <h5 className="card-title" id='card-title'>{item.titulo}</h5>
-                                <p className="card-text" id='card-text'> Renta: {item.precioAlquiler}</p>
-                                <p className="card-text" id='card-text_'> Duración: {item.duracion}</p>
-                                <p className="card-text" id='card-text_'> Alquiler: {item.alquiler}</p>
+                                <p className="card-text" id='card-text'> Renta: Q{item.precioAlquiler}</p>
+                                
                                 <p className="card-text" id='card-text_'> Genero: {item.genero}</p>
                             </div>
                             {item.isVisible && (
@@ -200,10 +247,15 @@ function Catalogo() {
                                     <div className='card-info'>
                                         <p className='itemP'>{item.sinopsis}</p>
                                         <p className='itemP'>Director: {item.director}</p>
+                                        <p className="card-text" id='card-text'> Renta: Q{item.precioAlquiler}</p>
+                                
+                                <p className="card-text" id='card-text_'> Genero: {item.genero}</p>
+                                        <p className="card-text" id='card-text_'> Duración: {item.duracion}</p>
+                                <p className="card-text" id='card-text_'> Alquiler: {item.alquiler}hrs</p>
                                         <p className='itemP'>Estreno: {item.estreno}</p>
                                     </div>
                                     <button type="button" onClick={() => comentar(index)} className="btn btn-outline-dark">Comentar</button>
-                                    <button type="button" className="btn btn-outline-dark">Rentar</button>
+                                    <button type="button" className="btn btn-outline-dark" onClick={() => rentar(index)}>Rentar</button>
                                 </div>
                             )}
                         </div>
@@ -241,8 +293,8 @@ function Catalogo() {
                                             <button className='btn btn-outline-secondary' onClick={() => editarComentario(index)}>Editar</button>
                                         )}
                                         {comentarioEditando === index && (
-                                            <div id="input">
-                                                <form onSubmit={(e) => { e.preventDefault(); actualizarComentario(index); }}>
+                                            <div >
+                                                <form id="input" onSubmit={(e) => { e.preventDefault(); actualizarComentario(index); }}>
                                                     <input
                                                         type="text"
                                                         className="form-control"
@@ -251,13 +303,31 @@ function Catalogo() {
                                                         value={texto}
                                                     />
                                                     <button className='btn btn-outline-secondary' type='submit'>Enviar</button>
+                                                    <button className='btn btn-outline-secondary' type='button' onClick={() => borrar(index)}>Eliminiar</button>
                                                     <button className='btn btn-outline-secondary' type='button' onClick={cancelarEdicion}>Cancelar</button>
-                                                    <button className='btn btn-outline-secondary' type='button' onClick={borrar}>Borrar</button>
+                                                    
                                                 </form>
                                             </div>
                                         )}
                                     </div>
                                 ))}
+                        </div>
+                    </div>
+                )}
+                {peliculaPorRentar && (
+                    <div className='rentar'>
+                        <h1 className='tituloRenta'>Rentar: {peliculaPorRentar.titulo}</h1>
+                        <div className='contPR'>
+                            <img src={peliculaPorRentar.image} alt="" />
+                        </div>
+                        <div className='datosRenta'>
+                            <h3>Datos de renta</h3>
+                            <p>Precio de renta: Q{peliculaPorRentar.precioAlquiler}</p>
+                            <p>Renta durante: {peliculaPorRentar.alquiler}hrs</p>
+                            <p><strong>Al rentar esta pelicula no podrá rentar más</strong></p>
+                            <p>Terminos y condiciones: Al rentar un pelicula usted se compromete a devolverla en el lapso de tiempo establecido de 48hrs, en caso contrario se le cobrara Q5 de mora por cada dia de retraso.</p>
+                            <button className='btn btn-outline-secondary' type='button' onClick={rentarPelicula}>Rentar</button>
+                            <button className='btn btn-outline-secondary' type='button' onClick={cancelarRenta}>Cancelar</button>
                         </div>
                     </div>
                 )}

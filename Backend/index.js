@@ -10,6 +10,9 @@ const PORT = 5000;
 const FILEUSUARIOS = 'Usuarios.json';
 const FILEPELICULAS = 'peliculas.json';
 const FILECOMENTARIOS = 'Comentarios.json';
+const FILEPELICULASRENTADAS = 'peliculasRentadas.json';
+const FILEPELICULASSINRENTAR = 'peliculasSinRentar.json';
+const FILEHISTORIAL = 'historial.json';
 
 app.use(bodyParser.json({ limit: '10mb' }));
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
@@ -18,6 +21,9 @@ app.use(cors());
 let dataUsuarios = [];
 let dataPeliculas = [];
 let dataComentarios = [];
+let dataPeliculasRentas = [];
+let dataPeliculasSinRentar = [];
+let dataHistorial = [];
 
 let contador = 0
 
@@ -42,6 +48,34 @@ if(!fs.existsSync(FILECOMENTARIOS)) {
     dataComentarios = JSON.parse(fileData);
 }
 
+if(!fs.existsSync(FILEPELICULASRENTADAS)) {
+    fs.writeFileSync(FILEPELICULASRENTADAS, JSON.stringify(dataPeliculasRentas));
+} else {
+    const fileData = fs.readFileSync(FILEPELICULASRENTADAS, 'utf-8');
+    dataPeliculasRentas = JSON.parse(fileData);
+}
+
+if(!fs.existsSync(FILEPELICULASSINRENTAR)) {
+    fs.writeFileSync(FILEPELICULASSINRENTAR, JSON.stringify(dataPeliculasSinRentar));
+} else {
+    const fileData = fs.readFileSync(FILEPELICULAS, 'utf-8');
+    const fileDataExiste = fs.readFileSync(FILEPELICULASSINRENTAR, 'utf-8');
+    const contenido = fs.statSync(FILEPELICULASSINRENTAR);
+    if (contenido.size === 2) {
+        dataPeliculasSinRentar = JSON.parse(fileData);
+    } else {
+        dataPeliculasSinRentar = JSON.parse(fileDataExiste);
+    }
+    
+}
+
+if(!fs.existsSync(FILEHISTORIAL)) {
+    fs.writeFileSync(FILEHISTORIAL, JSON.stringify(dataHistorial));
+} else {
+    const fileData = fs.readFileSync(FILEHISTORIAL, 'utf-8');
+    dataHistorial = JSON.parse(fileData);
+}
+
 function updateDataUsuarios() {
     fs.writeFileSync(FILEUSUARIOS, JSON.stringify(dataUsuarios));
 }
@@ -54,12 +88,24 @@ function updateDataComentarios(){
     fs.writeFileSync(FILECOMENTARIOS, JSON.stringify(dataComentarios));
 }
 
+function updateDataPeliculasRentadas(){
+    fs.writeFileSync(FILEPELICULASRENTADAS, JSON.stringify(dataPeliculasRentas));
+}
+
+function updateDataPeliculasSinRentar(){
+    fs.writeFileSync(FILEPELICULASSINRENTAR, JSON.stringify(dataPeliculasSinRentar));
+}
+
+function updateDataHistorial(){
+    fs.writeFileSync(FILEHISTORIAL, JSON.stringify(dataHistorial));
+}
+
 app.get("/usuarios", (req, res) => {
     res.json(dataUsuarios);
 });
 
 app.get("/peliculas", (req, res) => {
-    res.json(dataPeliculas);
+    res.json(dataPeliculasSinRentar);
 });
 
 app.get("/comentarios", (req, res) => {
@@ -116,7 +162,7 @@ app.post("/peliculas", (req, res) => {
 
 app.post("/comentarios", (req, res) => {
     const nuevoComentario = req.body;
-    nuevoComentario.posicion= contador;
+    nuevoComentario.posicion = contador;
     dataComentarios.push(nuevoComentario);
     updateDataComentarios();
     contador = contador + 1;
@@ -210,12 +256,25 @@ app.delete('/peliculas/:titulo', (req, res) => {
     }
 });
 
+app.delete('/comentarios/:posicion', (req, res) => {
+    const posicion = parseInt(req.params.posicion, 10);
+    const index = dataComentarios.findIndex(comentario => {
+        if (comentario.posicion === posicion) {
+            return comentario
+        }
+    });
+    if (index === -1) {
+        res.status(404).send({response: 'Comentario no encontrado'});
+    } else {
+        dataComentarios.splice(index, 1);
+        updateDataComentarios();
+        res.send({response: 'Comentario eliminado correctamente'});
+    }
+});
+
 app.post('/login', (req, res) => {
     const data = req.body;
-    console.log(data)
     const usuario = dataUsuarios.find(usuario => {
-        console.log(usuario.correo)
-        console.log(usuario.contraseña)
         if (usuario.correo === data.correo && usuario.contraseña === data.contraseña) {
             return usuario
         }
@@ -233,6 +292,105 @@ app.post('/login', (req, res) => {
         }
         res.json(response);
     }
+});
+
+app.post('/rentar/:titulo', (req, res) => {
+    const titulo = req.params.titulo;
+    const data = req.body;
+    const pelicula = dataPeliculasRentas.find(pelicula => pelicula.titulo === titulo);
+
+    if (pelicula) {
+        res.status(404).send({response: 'Pelicula fuera de renta'});
+        return;
+    }
+
+    const personaAlquilando = dataPeliculasRentas.some(pelicula => pelicula.persona === data.persona);
+
+    if (personaAlquilando) {
+        res.status(404).send({response: 'Usted ya ha alquilado una pelicula'});
+        return;
+    }
+
+    const rentada = dataPeliculasSinRentar.findIndex(pelicula => pelicula.titulo === titulo)
+
+    dataPeliculasSinRentar.splice(rentada, 1)
+    updateDataPeliculasSinRentar()
+
+    data.titulo = titulo;
+    dataPeliculasRentas.push(data);
+    updateDataPeliculasRentadas();
+
+    const fechaActual = new Date();
+    const fecha = fechaActual.toLocaleString();
+
+    const Fecha48 = new Date(fechaActual.getTime() + 48 * 60 * 60 * 1000);
+    const fecha48 = Fecha48.toLocaleString();
+
+    data.fechaInicio = fecha;
+    data.fechaFin = fecha48;
+    data.estado = "En alquiler";
+    dataHistorial.push(data);
+    updateDataHistorial();
+    
+    res.status(202).send({response: "Pelicula rentada correctamente", data: dataPeliculasSinRentar});
+    
+});
+
+app.delete('/devolver/:titulo', (req, res) => {
+    const titulo = req.params.titulo;
+    const index = dataHistorial.findIndex(pelicula => pelicula.titulo === titulo);
+    const pelicula = dataPeliculas.find(pelicula => pelicula.titulo === titulo)
+    if (index === -1) {
+        res.status(404).send({response: 'Pelicula no encontrada'});
+    } 
+
+    const peliculaHistorial = dataHistorial[index];
+    const peliculaRentasIndex = dataPeliculasRentas.findIndex(pelicula => pelicula.titulo === titulo);
+
+    if (peliculaRentasIndex === -1) {
+        return res.status(404).send({ response: 'Pelicula no encontrada en rentas' });
+    }
+
+    const moment = require('moment');
+    const fechaActual = moment();
+    let mora = 0;
+
+    const fechaInicio = peliculaHistorial.fechaInicio
+
+    const fechaInicioMoment = moment(fechaInicio, 'DD/M/YYYY, h:mm:ss a');
+
+    if (fechaInicioMoment.isValid()) {
+        const diferenciaMilisegundos = fechaActual.diff(fechaInicioMoment);
+        const diferenciaDias = fechaActual.diff(fechaInicioMoment, 'days');
+
+        if (diferenciaDias >= 2) {
+            const diasAdicionales = diferenciaDias - 1;
+            mora = diasAdicionales * 5;
+            peliculaHistorial.estado = "Devuelto tarde"
+        } else {
+            peliculaHistorial.estado = "Devuelto"
+        }
+    } else {
+        console.log('Fecha de inicio no válida');
+    }
+    const fechaFormato = moment(fechaActual);
+    const fechaFormateada = fechaFormato.format('DD/MM/YYYY, h:mm:ss a');
+    peliculaHistorial.fechaEntrega = fechaFormateada;
+    peliculaHistorial.mora = mora;
+    peliculaHistorial.precioTotal = peliculaHistorial.precioAlquiler + mora;
+    updateDataHistorial();
+
+    dataPeliculasSinRentar.push(pelicula);
+    updateDataPeliculasSinRentar();
+
+    dataPeliculasRentas.splice(peliculaRentasIndex, 1);
+    updateDataPeliculasRentadas();
+
+    res.json({ response: 'Pelicula devuelta correctamente'});
+});
+
+app.get('/historial', (req, res) => {
+    res.json(dataHistorial);
 });
 
 app.listen(PORT, () => {

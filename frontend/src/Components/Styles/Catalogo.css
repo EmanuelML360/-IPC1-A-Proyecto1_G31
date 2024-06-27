@@ -167,6 +167,9 @@ section div img {
     font-family: 'Times New Roman', Times, serif;
     font-weight: 600;
     width: 100%;
+    border-bottom: 1px solid rgb(230, 230, 230);
+    box-sizing: border-box;
+    padding: 5%;
 }
 
 #card-text_ {
@@ -174,20 +177,22 @@ section div img {
     font-size: small;
     font-family: 'Times New Roman', Times, serif;
     font-weight: 400;
-    width: fit-content;
-    margin-right: 2.5%;
-    margin-left: 2.5%;
+    width: 100%;
+    margin-top: none;
 }
 
 #card-title {
     width: 100%;
+    border-bottom: 1px solid rgb(230, 230, 230);
+    box-sizing: border-box;
+    padding-bottom: 2%;
 }
 
 #card {
     box-sizing: border-box;
     overflow: hidden;
     width: 20%;
-    margin-right: 3%;
+    margin-right: 1%;
     border-color: rgb(109, 109, 109);
     z-index: 1;
 }
@@ -222,6 +227,7 @@ section div img {
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
+    padding: 1%;
 }
 
 .vermas {
@@ -253,6 +259,7 @@ section div img {
     text-align: center;
     margin-bottom: 5%;
     padding: 0;
+    font-size: small;
 }
 
 .card-info {
@@ -312,7 +319,7 @@ section div img {
 }
 
 #comentario_ {
-    width: 50%;
+    width: 70%;
     margin-left: 30%;
     box-sizing: border-box;
     display: flex;
@@ -333,6 +340,76 @@ section div img {
 }
 
 #input {
+    width: 70%;
     margin-left: 3%;
+    box-sizing: border-box;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
+.rentar {
+    width: 90%;
+    height: auto;
+    color: rgb(26, 24, 24);
+    position: absolute;
+    background-color: rgb(255, 0, 0);
+    z-index: 4;
+    padding: 5%;
+    bottom: 0;
+    margin-left: 5%;
+    box-sizing: border-box;
+    display: flex;
+    flex-wrap: wrap;
+    border-radius: 15px 15px 0 0;
+}
+
+.contPR {
+    width: 30%;
+    height: auto;
+    box-sizing: border-box;
+    margin-top: 2%;
+}
+
+.contPR img {
+    opacity: 1;
+}
+
+.datosRenta {
+    width: 70%;
+    height: auto;
+    margin-top: 2%;
+    box-sizing: border-box;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: start;
+    text-align: center;
+    background-color: white;
+    padding: 5%;
+}
+
+.datosRenta h3 {
+    width: 90%;
+    border-bottom: 2px solid rgb(26, 24, 24);
+}
+
+.datosRenta p {
+    width: 90%;
+    text-align: left;
+}
+
+.tituloRenta {
+    width: 100%;
+    height: auto;
+
+}
+
+.rentar .btn {
+    border-color: black;
+    color: black;
+}
+
+.rentar .btn:hover {
+    background-color: rgba(0, 0, 0, 0.322);
+}

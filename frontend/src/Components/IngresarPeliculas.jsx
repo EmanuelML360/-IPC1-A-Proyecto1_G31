@@ -13,7 +13,7 @@ function IngresarPeliculas() {
     const [estreno, setEstreno] = useState("");
     const [duracion, setDuracion] = useState("");
     const [genero, setGenero] = useState("");
-    const alquiler = "48 hrs";
+    const alquiler = 48;
     const [cookies, setCookie, removeCookie] = useCookies(['usuario']);
     const [selectedImage, setSelectedImage] = useState('');
     const [base64Image, setBase64Image] = useState('');
@@ -44,10 +44,11 @@ function IngresarPeliculas() {
 
     const handlePost = () => {
         const userName = cookies.usuario;
+        const precioAlquiler_ = parseInt(precioAlquiler, 10) 
         const data = {
             titulo: titulo,
             sinopsis: sinopsis,
-            precioAlquiler: precioAlquiler,
+            precioAlquiler: precioAlquiler_,
             director: director,
             estreno: estreno,
             duracion: duracion,
@@ -110,7 +111,7 @@ function IngresarPeliculas() {
                             onChange={(e) => setSinopsis(e.target.value)}
                             value={sinopsis}
                         > </textarea>
-                        <label htmlFor="floatingInput">Sinpsis</label>
+                        <label htmlFor="floatingInput">Sinopsis</label>
                     </div>
                     <div className="form-floating" style={{ width: "100%" }}>
                         <input
@@ -180,7 +181,7 @@ function IngresarPeliculas() {
                     <div className='imagenMostrar'>
                         <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "100%", maxHeight: "30rem", height: "20rem", marginTop: "5%" }}>
                             <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "100%", height: "100%", maxHeight: "30rem", maxWidth: "25rem" }}>
-                                {selectedImage && <img src={selectedImage} alt="Selected" style={{ objectFit: "cover", width: "22rem", height: "30rem", marginTop: "100px" }} />}
+                                {selectedImage && <img src={selectedImage} alt="Selected" style={{ objectFit: "cover", width: "22rem", height: "30rem", marginTop: "300px" }} />}
                             </div>
                         </div>
                     </div>

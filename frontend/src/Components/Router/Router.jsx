@@ -4,6 +4,10 @@ import SignUp from '../SignUp';
 import Admin from '../Admin';
 import Catalogo from '../Catalogo';
 import IngresarPeliculas from '../IngresarPeliculas'
+import Historial from '../Historial';
+import ALquilada from '../Alquilada';
+import DevolverPelicula from '../DevolverPelicula';
+import Perfil from '../Perfil';
 
 function Router(){
     return(
@@ -15,6 +19,10 @@ function Router(){
                 <Route path='/admin' element={<Admin />} />
                 <Route path='/user' element={<Catalogo />} />
                 <Route path='/ingresarPeliculas' element={<IngresarPeliculas />} />
+                <Route path='/user/historial' element={<Historial />} />
+                <Route path='/user/alquilada' element={<ALquilada />} />
+                <Route path='/user/devolverAlquilada' element={<DevolverPelicula />} />
+                <Route path='/user/perfil' element={<Perfil />} />
             </Routes>
         </BrowserRouter>
     )
