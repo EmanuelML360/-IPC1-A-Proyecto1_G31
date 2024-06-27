@@ -1,1 +1,29 @@
-[{"nombre":"José","apellido":"Monzón","genero":"M","correo":"josemonzon360@gmail.com","contraseña":"123","fechaNacimiento":"2004-02-22","role":"1"},{"nombre":"Emanuel","apellido":"Monzon","genero":"M","correo":"emanuelmonzon360@gmail.com","contraseña":"123","fechaNacimiento":"2004-02-22","role":"0"},{"nombre":"José","apellido":"Lémus","genero":"M","correo":"joselemus@gmail.com","contraseña":"123","fechaNacimiento":"2004-02-22","role":"1"}]
+[
+    {
+        "nombre": "José",
+        "apellido": "Monzón",
+        "genero": "M",
+        "correo": "josemonzon360@gmail.com",
+        "contraseña": "123",
+        "fechaNacimiento": "2004-02-22",
+        "role": "1"
+    },
+    {
+        "nombre": "Emanuel",
+        "apellido": "Monzon",
+        "genero": "M",
+        "correo": "emanuelmonzon360@gmail.com",
+        "contraseña": "123",
+        "fechaNacimiento": "2004-02-22",
+        "role": "0"
+    },
+    {
+        "nombre": "José",
+        "apellido": "Lémus",
+        "genero": "M",
+        "correo": "joselemus@gmail.com",
+        "contraseña": "123",
+        "fechaNacimiento": "2004-02-22",
+        "role": "1"
+    }
+]

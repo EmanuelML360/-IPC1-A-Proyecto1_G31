@@ -57,6 +57,12 @@ function Catalogo() {
 
     const comentar = (index) => {
         setPeliculaSeleccionada(peliculas[index]);
+        document.body.classList.add('no-scroll');
+        const topElement = document.getElementById('TOP');
+        if (topElement) {
+            topElement.scrollIntoView({ behavior: 'smooth' });
+        }
+
         fetch(`http://localhost:5000/comentarios`, {
             method: "GET",
         })
@@ -73,9 +79,16 @@ function Catalogo() {
 
     const rentar = (index) => {
         setPeliculaPorRentar(peliculas[index])
+        document.body.classList.add('no-scroll');
+
+        const topElement = document.getElementById('TOP');
+        if (topElement) {
+            topElement.scrollIntoView({ behavior: 'smooth' });
+        }
     }
 
     const cancelarRenta = () => {
+        document.body.classList.remove('no-scroll');
         setPeliculaPorRentar(null);
     }
 
@@ -98,6 +111,7 @@ function Catalogo() {
                 alert(res.response)
                 setPeliculas(res.data.reverse());
                 setPeliculaPorRentar(null);
+                document.body.classList.remove('no-scroll');
             })
             .catch((error) => console.error(error));
             
@@ -105,6 +119,7 @@ function Catalogo() {
     }
 
     const salir = () => {
+        document.body.classList.remove('no-scroll');
         setPeliculaSeleccionada(null);
         setTexto("");
     };
@@ -194,8 +209,10 @@ function Catalogo() {
             .then((response) => response.json())
             .then(() => {
                 alert('Comentario creado correctamente');
-                setComentarios([data, ...comentarios]);
-                cancelarEdicion()
+                setComentarios(prevComentarios =>[data, ...comentarios]);
+                cancelarEdicion();
+                document.body.classList.remove('no-scroll');
+                comentar(peliculas.findIndex(p => p.titulo === peliculaSeleccionada.titulo));
             })
             .catch((error) => console.error(error));
                 
@@ -208,7 +225,7 @@ function Catalogo() {
                     <div className='contIcono'>
                         <img src="/src/Components/Imagenes/Popcornflix.png" alt="PopCornFlix" />
                     </div>
-                    <div className='menu'>
+                    <div id='menu'>
                         <ul className='submenu'>
                             <li className='casilla'><a href="/user" className='link'>Catalogo<figure className='figura'></figure></a></li>
                             <li className='casilla'><a href="/user/alquilada" className='link'>Alquilada<figure className='figura'></figure></a></li>
@@ -225,7 +242,7 @@ function Catalogo() {
                     <img src="src/Components/Imagenes/FondoCine.jpg" alt="PopCornFlix" />
                     <h1 className='titulo'>POPCORNFLIX</h1>
                 </div>
-                <div className='catalogo'>
+                <div className='catalogo' id='TOP'>
                     <h1>Catalogo</h1>
                     <figure className='linea'></figure>
                     <a name="catalogo"></a>
@@ -262,7 +279,7 @@ function Catalogo() {
                     ))}
                 </div>
                 {peliculaSeleccionada && (
-                    <div id='comentarios'>
+                    <div id='comentarios' class="scrollable-container">
                         <h3 id='getTitulo'>{peliculaSeleccionada.titulo}</h3>
                         <p className='nombreCom'>Comentario de: {persona}</p>
                         <form onSubmit={subirComentario} className='form-signin w-100 m-auto'>
@@ -315,6 +332,7 @@ function Catalogo() {
                     </div>
                 )}
                 {peliculaPorRentar && (
+                    <div className='contRentar'>
                     <div className='rentar'>
                         <h1 className='tituloRenta'>Rentar: {peliculaPorRentar.titulo}</h1>
                         <div className='contPR'>
@@ -330,8 +348,13 @@ function Catalogo() {
                             <button className='btn btn-outline-secondary' type='button' onClick={cancelarRenta}>Cancelar</button>
                         </div>
                     </div>
+                    </div>
                 )}
             </section>
+            <footer id='footer'>
+                <h3>PopCornFlix el mejor lugar para rentar peliculas</h3>
+                <p>Copyrigh- Derechos reservados sobre el sitio web</p>
+            </footer>
         </>
     );
 }

@@ -9,6 +9,7 @@ import ALquilada from '../Alquilada';
 import DevolverPelicula from '../DevolverPelicula';
 import Perfil from '../Perfil';
 import Contenido from '../Contenido';
+import Usuarios from '../Usuarios';
 
 function Router(){
     return(
@@ -25,6 +26,7 @@ function Router(){
                 <Route path='/user/devolverAlquilada' element={<DevolverPelicula />} />
                 <Route path='/user/perfil' element={<Perfil />} />
                 <Route path='/admin/contenido' element={<Contenido />} />
+                <Route path='/admin/usuarios' element={<Usuarios />} />
             </Routes>
         </BrowserRouter>
     )

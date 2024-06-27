@@ -71,7 +71,7 @@ function Perfil() {
                     <div className='contIcono'>
                         <img src="/src/Components/Imagenes/Popcornflix.png" alt="PopCornFlix" />
                     </div>
-                    <div className='menu'>
+                    <div id='menu'>
                         <ul className='submenu'>
                             <li className='casilla'><a href="/user" className='link'>Catalogo<figure className='figura'></figure></a></li>
                             <li className='casilla'><a href="/user/alquilada" className='link'>Alquilada<figure className='figura'></figure></a></li>
@@ -113,16 +113,17 @@ function Perfil() {
                                     </div>
 
                                     <div className="form-floating" style={{ width: "100%" }}>
-                                        <select type="text"
+                                        <select
                                             className="form-control"
                                             id="floatingInput"
-                                            placeholder=""
                                             onChange={(e) => setGenero(e.target.value)}
-                                            value={genero}>
-                                            <option value="opcion1">M</option>
-                                            <option value="opcion2">F</option>
+                                            value={genero}
+                                        >
+                                            <option value="" disabled hidden>Selecciona una opción</option>
+                                            <option value="M">M</option>
+                                            <option value="F">F</option>
                                         </select>
-                                        <label htmlFor="floatingInput">Genero</label>
+                                        <label htmlFor="floatingInput">Género</label>
                                     </div>
 
                                     <div className="form-floating" style={{ width: "100%" }}>
@@ -154,6 +155,10 @@ function Perfil() {
                     </div>
                 </div>
             </section>
+            <footer className='footer'>
+                <h3>PopCornFlix el mejor lugar para rentar peliculas</h3>
+                <p>Copyrigh- Derechos reservados sobre el sitio web</p>
+            </footer>
         </>
     );
 };

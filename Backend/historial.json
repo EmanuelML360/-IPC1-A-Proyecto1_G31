@@ -1,1 +1,20 @@
-[]
+[
+    {
+        "persona": "josemonzon360@gmail.com",
+        "precioAlquiler": 50,
+        "titulo": "It",
+        "fechaInicio": "27/6/2024, 4:44:26 p. m.",
+        "fechaFin": "29/6/2024, 4:44:26 p. m.",
+        "estado": "En alquiler",
+        "retraso": 0
+    },
+    {
+        "persona": "joselemus@gmail.com",
+        "precioAlquiler": 60,
+        "titulo": "Star Wars: El Despertar de la Fuerza",
+        "fechaInicio": "24/6/2024, 4:44:45 p. m.",
+        "fechaFin": "26/6/2024, 4:44:45 p. m.",
+        "estado": "En alquiler",
+        "retraso": 0
+    }
+]

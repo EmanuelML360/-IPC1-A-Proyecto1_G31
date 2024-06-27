@@ -72,7 +72,7 @@ function DevolverPelicula(){
                     <div className='contIcono'>
                         <img src="/src/Components/Imagenes/Popcornflix.png" alt="PopCornFlix" />
                     </div>
-                    <div className='menu'>
+                    <div id='menu'>
                         <ul className='submenu'>
                             <li className='casilla'><a href="/user" className='link'>Catalogo<figure className='figura'></figure></a></li>
                             <li className='casilla'><a href="/user/alquilada" className='link'>Alquilada<figure className='figura'></figure></a></li>
@@ -109,10 +109,19 @@ function DevolverPelicula(){
                                     
                                 </tr>
                             </table>
+                            {(item.retraso > 0 && item.estado === 'En alquiler') && (
+                                <div className="alert alert-danger" role="alert">
+                                    ¡Tienes días de retraso al devolver esta película!
+                                </div>
+                            )}
                         </div>
                     ))}
                 </div>
             </section>
+            <footer className='footer'>
+                <h3>PopCornFlix el mejor lugar para rentar peliculas</h3>
+                <p>Copyrigh- Derechos reservados sobre el sitio web</p>
+            </footer>
         </>    
     );
 };

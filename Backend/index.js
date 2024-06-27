@@ -256,17 +256,12 @@ app.put("/comentarios/:posicion", (req, res) => {
 
 app.delete('/usuarios/:correo', (req, res) => {
     const correo = req.params.correo;
-    const index = dataUsuarios.findIndex(usuario => {
-        if (usuario.correo === correo) {
-            console.log("Usuario encontrado")
-            return usuario
-        }
-    });
+    const index = dataUsuarios.findIndex(usuario => usuario.correo === correo) 
     if (index === -1) {
         res.status(404).send({response: 'Usuario no encontrado'});
     } else {
         dataUsuarios.splice(index, 1);
-        updateDataFile();
+        updateDataUsuarios();
         res.send({response: 'Usuario eliminado correctamente'});
     }
 });
@@ -395,8 +390,8 @@ app.delete('/devolver/:titulo', (req, res) => {
         const diferenciaMilisegundos = fechaActual.diff(fechaInicioMoment);
         const diferenciaDias = fechaActual.diff(fechaInicioMoment, 'days');
 
-        if (diferenciaDias >= 2) {
-            diasAdicionales = diferenciaDias - 1;
+        if (diferenciaDias > 2) {
+            diasAdicionales = diferenciaDias - 2;
             mora = diasAdicionales * 5;
             peliculaHistorial.estado = "Devuelto tarde"
         } else {
@@ -428,7 +423,7 @@ app.get('/historial', (req, res) => {
 });
 
 const calcularMora = (diasRetraso) => {
-    const tarifaPorDia = 10;
+    const tarifaPorDia = 5;
     return diasRetraso * tarifaPorDia;
 };
 
@@ -442,8 +437,8 @@ app.get('/historial/retraso', (req, res) => {
         if (fechaInicioMoment.isValid()) {
             const diferenciaDias = fechaActual.diff(fechaInicioMoment, 'days');
 
-            if (diferenciaDias >= 2) {
-                pelicula.retraso = diferenciaDias - 1;
+            if (diferenciaDias > 2) {
+                pelicula.retraso = diferenciaDias - 2;
                 pelicula.mora = calcularMora(pelicula.retraso);
                 updateDataHistorial()
             } else {

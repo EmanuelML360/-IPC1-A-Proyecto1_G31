@@ -25,24 +25,24 @@ function Historial() {
                     historial_Usuario.forEach(pelicula => {
                         if (pelicula.estado === estado) {
                             pelicula.mora = 0;
-                        } else if (pelicula.estado === "En alquiler"){
+                        } else if (pelicula.estado === "En alquiler") {
                             pelicula.mora = 0;
                         }
                     });
                 }
-                
+
                 setHistorial(historial_Usuario);
             })
             .catch((error) => console.error(error));
 
-            fetch(`http://localhost:5000/historial/retraso`, {
-                method: "GET",
+        fetch(`http://localhost:5000/historial/retraso`, {
+            method: "GET",
+        })
+            .then((response) => response.json())
+            .then((res) => {
+                const retraso = res.response
             })
-                .then((response) => response.json())
-                .then((res) => {
-                    const retraso = res.response
-                })
-                .catch((error) => console.error(error));
+            .catch((error) => console.error(error));
     }, []);
 
     const handleLogout = () => {
@@ -57,7 +57,7 @@ function Historial() {
                     <div className='contIcono'>
                         <img src="/src/Components/Imagenes/Popcornflix.png" alt="PopCornFlix" />
                     </div>
-                    <div className='menu'>
+                    <div id='menu'>
                         <ul className='submenu'>
                             <li className='casilla'><a href="/user" className='link'>Catalogo<figure className='figura'></figure></a></li>
                             <li className='casilla'><a href="/user/alquilada" className='link'>Alquilada<figure className='figura'></figure></a></li>
@@ -100,15 +100,19 @@ function Historial() {
                                     <td>Q{item.precioAlquiler + item.mora}</td>
                                 </tr>
                             </table>
-                            {(item.retraso > 0 && item.estado === 'En renta') && (
-            <div className="alert alert-danger" role="alert">
-                ¡Tienes días de retraso al devolver esta película!
-            </div>
-        )}
+                            {(item.retraso > 0 && item.estado === 'En alquiler') && (
+                                <div className="alert alert-danger" role="alert">
+                                    ¡Tienes días de retraso al devolver esta película!
+                                </div>
+                            )}
                         </div>
                     ))}
                 </div>
             </section>
+            <footer className='footer'>
+                <h3>PopCornFlix el mejor lugar para rentar peliculas</h3>
+                <p>Copyrigh- Derechos reservados sobre el sitio web</p>
+            </footer>
         </>
     );
 }
